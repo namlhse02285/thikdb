@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as ppv;
 
 class StringDb {
   final String tableName;
@@ -10,7 +13,32 @@ class StringDb {
 
   StringDb(this.tableName);
 
-  Future<void> open() async {
+  //Set dbRootDir if Hive is not init before
+  Future<void> open([String dbRootDir = ""]) async {
+    if(dbRootDir.isNotEmpty) {
+      String dbDirPath = "";
+      if(Platform.isWindows){
+        dbDirPath = path.joinAll([
+          File(Platform.resolvedExecutable).parent.path,
+          dbRootDir, "string_db"
+        ]);
+      }
+      if(Platform.isAndroid){
+        List<Directory>? externalStorageDirectories = await ppv.getExternalStorageDirectories();
+        if(null == externalStorageDirectories) {
+          throw const FileSystemException("Cannot get externalStorageDirectories on android!");
+        }
+        dbDirPath = path.joinAll([
+          externalStorageDirectories[0].path,
+          dbRootDir, "string_db"
+        ]);
+      }
+
+      if(dbDirPath.isEmpty) {
+        throw FileSystemException("OS ${Platform.operatingSystem} not handled.");
+      }
+      Hive.init(dbDirPath);
+    }
     box = await Hive.openBox<String>(tableName);
   }
 
