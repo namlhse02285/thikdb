@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart' as ppv;
 import 'package:thikdb/thikdb.dart';
@@ -41,6 +42,16 @@ class AppWg extends StatelessWidget {
         AppConfig.testStringVar = AppConfig.testStringVar.isEmpty ? "not_empty" : "";
         ctl.testStringVar.value = AppConfig.testStringVar;
       }, child: const Text("testStringVar")),
+      Obx(() => Text(ctl.testDoubleVar.value.toString())),
+      ElevatedButton(onPressed: () {
+        AppConfig.testDoubleVar = AppConfig.testDoubleVar == 0.0 ? 1.2 : 0.0;
+        ctl.testDoubleVar.value = AppConfig.testDoubleVar;
+      }, child: const Text("testDoubleVar")),
+      ElevatedButton(onPressed: () {
+        AppConfig._.close().whenComplete(() {
+          SystemNavigator.pop();
+        });
+      }, child: const Text("Close and exit")),
     ],);
   }
 }
@@ -51,13 +62,13 @@ class AppCtl extends GetxController {
 }
 
 class AppConfig extends StringDb {
-  static const String dbRootDir = "db";
+  static const String dbtDir = "db";
   static late AppConfig _;
   AppConfig() :super("app_config");
 
   static Future<void> init() async {
     _ = AppConfig();
-    await _.open(dbRootDir);
+    await _.open(dbRootDir: dbtDir);
   }
 
   static String get testStringVar => _.get("testStringVar", "");

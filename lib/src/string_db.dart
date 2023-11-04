@@ -14,24 +14,18 @@ class StringDb {
   StringDb(this.tableName);
 
   //Set dbRootDir if Hive is not init before
-  Future<void> open([String dbRootDir = ""]) async {
+  Future<void> open({String dbRootDir = "", List<int>? aesKey}) async {
     if(dbRootDir.isNotEmpty) {
       String dbDirPath = "";
       if(Platform.isWindows){
-        dbDirPath = path.joinAll([
-          File(Platform.resolvedExecutable).parent.path,
-          dbRootDir, "string_db"
-        ]);
+        dbDirPath = path.join(File(Platform.resolvedExecutable).parent.path, dbRootDir);
       }
       if(Platform.isAndroid){
         List<Directory>? externalStorageDirectories = await ppv.getExternalStorageDirectories();
         if(null == externalStorageDirectories) {
           throw const FileSystemException("Cannot get externalStorageDirectories on android!");
         }
-        dbDirPath = path.joinAll([
-          externalStorageDirectories[0].path,
-          dbRootDir, "string_db"
-        ]);
+        dbDirPath = path.join(externalStorageDirectories[0].path, dbRootDir);
       }
 
       if(dbDirPath.isEmpty) {
@@ -39,7 +33,11 @@ class StringDb {
       }
       Hive.init(dbDirPath);
     }
-    box = await Hive.openBox<String>(tableName);
+    HiveCipher? cipher;
+    if(aesKey != null) {
+      cipher = HiveAesCipher(aesKey);
+    }
+    box = await Hive.openBox<String>(tableName, encryptionCipher: cipher);
   }
 
   Future<void> close() async {
