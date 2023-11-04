@@ -1,39 +1,37 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+Hive implementation for easy create simple config for app.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Quick implement config (ex: for app) with data save to Hive db
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Create class that extend ThikDb then call open()
+For example:
+```dart
+class AppConfig extends ThikDb {
+  static const String dbDir = "db"; //create 'db' directory under app directory
+  static late final AppConfig _; //static instance to quick access
+  AppConfig() :super("app_config"); //db table name
+
+  static Future<void> init() async {
+    _ = AppConfig();
+    String dbFullPath = (await _.open(dbDirName: dbDir))!;
+    dbPath = dbFullPath;
+  }
+}
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Create some static variable that you will directly access.
+Longer examples is in `/example` folder.
 
 ```dart
-const like = 'sample';
+static String get testStringVar => _.get("testStringVar", "");
+static set testStringVar(String value) => _.put("testStringVar", value);
 ```
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+Either create issue on Github or email me if you found something or want more info
