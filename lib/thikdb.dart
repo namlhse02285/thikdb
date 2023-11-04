@@ -1,3 +1,3 @@
 library thikdb;
 
-export 'src/string_db.dart';
+export 'src/thik_db.dart';

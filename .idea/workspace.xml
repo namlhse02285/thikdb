@@ -7,12 +7,22 @@
     <list default="true" id="c47d4cc4-629b-4f28-9113-b4256e4f76c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/string_db.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/string_db.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/string_db.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/thikdb.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/thikdb.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/thikdb_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/thikdb_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
