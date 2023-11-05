@@ -21,20 +21,12 @@ class ThikDb {
 
     /// Save database into app's storage directory
     if(dbDirName.isNotEmpty) {
-      if(Platform.isWindows){
-        dbDirPath = path.join(File(Platform.resolvedExecutable).parent.path, dbDirName);
-      }
-      if(Platform.isAndroid){
-        List<Directory>? externalStorageDirectories = await ppv.getExternalStorageDirectories();
-        if(null == externalStorageDirectories) {
-          throw const FileSystemException("Cannot get externalStorageDirectories on android!");
-        }
-        dbDirPath = path.join(externalStorageDirectories[0].path, dbDirName);
-      }
+      List<String> appPathList = await listAppDirectory();
 
-      if(dbDirPath == null) {
+      if(appPathList.isEmpty) {
         throw FileSystemException("OS ${Platform.operatingSystem} not handled.");
       }
+      dbDirPath = path.join(appPathList[0], dbDirName);
       Hive.init(dbDirPath);
     }
     HiveCipher? cipher;
@@ -78,5 +70,20 @@ class ThikDb {
     List<double> ret = dbValue.split(ThikDb.valuesSeparator)
         .map((e) => double.parse(e)).toList();
     return Alignment(ret[0], ret[1]);
+  }
+
+  Future<List<String>> listAppDirectory() async {
+    if(Platform.isWindows){
+      return <String>[File(Platform.resolvedExecutable).parent.path];
+    }
+    if(Platform.isAndroid){
+      List<Directory>? externalStorageDirectories = await ppv.getExternalStorageDirectories();
+      if(null == externalStorageDirectories) {
+        throw const FileSystemException("Cannot get externalStorageDirectories on android!");
+      }
+      return externalStorageDirectories.map((e) => e.path).toList();
+    }
+
+    return <String>[];
   }
 }

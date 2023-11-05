@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -38,6 +39,24 @@ class AppWg extends StatelessWidget {
   Widget build(BuildContext context) {
     AppCtl ctl = Get.put(AppCtl());
     return Column(children: [
+      FutureBuilder(future: AppConfig._.listAppDirectory(), builder: (context, snapshot) {
+        if(snapshot.connectionState != ConnectionState.done) {
+          return Container();
+        }
+        List<DropdownMenuEntry<String>> dropDownList = snapshot.data!.map(
+                (e) => DropdownMenuEntry<String>(value: e, label: e)).toList();
+        return DropdownMenu<String>(
+          width: 500,
+          initialSelection: AppConfig.testAppResVar,
+          controller: TextEditingController(),
+          label: const Text('testAppResVar'),
+          dropdownMenuEntries: dropDownList,
+          onSelected: (String? selectedResDir) {
+            AppConfig.testAppResVar = selectedResDir ?? "";
+            debugPrint(AppConfig.testAppResVar);
+          },
+        );
+      },),
       Text(AppConfig.dbPath),
       Obx(() => Text(ctl.testStringVar.value)),
       ElevatedButton(onPressed: () {
@@ -79,6 +98,7 @@ class AppWg extends StatelessWidget {
 }
 
 class AppCtl extends GetxController {
+  RxString testAppResVar = RxString(AppConfig.testAppResVar);
   RxString testStringVar = RxString(AppConfig.testStringVar);
   RxDouble testDoubleVar = RxDouble(AppConfig.testDoubleVar);
   RxList<double> testListVar = RxList<double>(AppConfig.testListVar);
@@ -97,6 +117,9 @@ class AppConfig extends ThikDb {
     String dbFullPath = (await _.open(dbDirName: dbDir))!;
     dbPath = dbFullPath;
   }
+
+  static String get testAppResVar => _.get("testAppResVar", "");
+  static set testAppResVar(String value) => _.put("testAppResVar", value);
 
   static String get testStringVar => _.get("testStringVar", "");
   static set testStringVar(String value) => _.put("testStringVar", value);

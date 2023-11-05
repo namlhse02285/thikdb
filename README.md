@@ -28,9 +28,11 @@ Create some static variable that you will directly access.
 Longer examples is in `/example` folder.
 
 ```dart
-static String get testStringVar => _.get("testStringVar", "");
-static set testStringVar(String value) => _.put("testStringVar", value);
+static String get testStringVar => _.get("testStringVar", ""); //key - default value
+static set testStringVar(String value) => _.put("testStringVar", value); //key - value
 ```
+
+call listAppDirectory() to get simple app folder for some goal, ex: for save big file
 
 ## Additional information
 
