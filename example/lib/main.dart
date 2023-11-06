@@ -1,10 +1,8 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart' as ppv;
 import 'package:thikdb/thikdb.dart';
 
 void main() {
@@ -53,10 +51,22 @@ class AppWg extends StatelessWidget {
           dropdownMenuEntries: dropDownList,
           onSelected: (String? selectedResDir) {
             AppConfig.testAppResVar = selectedResDir ?? "";
-            debugPrint(AppConfig.testAppResVar);
           },
         );
       },),
+      Obx(() {
+        List<DropdownMenuEntry<String>> dropDownList = ctl.testListAppDirVar.value.map(
+                (e) => DropdownMenuEntry<String>(value: e, label: e)).toList();
+        return DropdownMenu<String>(
+          width: 500,
+          initialSelection: AppConfig.testAppResVar,
+          label: const Text('testAppResVar'),
+          dropdownMenuEntries: dropDownList,
+          onSelected: (String? selectedResDir) {
+            AppConfig.testAppResVar = selectedResDir ?? "";
+          },
+        );
+      }),
       Text(AppConfig.dbPath),
       Obx(() => Text(ctl.testStringVar.value)),
       ElevatedButton(onPressed: () {
@@ -98,6 +108,7 @@ class AppWg extends StatelessWidget {
 }
 
 class AppCtl extends GetxController {
+  Rx<List<String>> testListAppDirVar = Rx<List<String>>(AppConfig.listAppDir);
   RxString testAppResVar = RxString(AppConfig.testAppResVar);
   RxString testStringVar = RxString(AppConfig.testStringVar);
   RxDouble testDoubleVar = RxDouble(AppConfig.testDoubleVar);
