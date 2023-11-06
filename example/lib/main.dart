@@ -116,7 +116,11 @@ class AppConfig extends ThikDb {
     _ = AppConfig();
     String dbFullPath = (await _.open(dbDirName: dbDir))!;
     dbPath = dbFullPath;
+    listAppDir = await _.listAppDirectory();
   }
+
+  static List<String> get listAppDir => _.get("listAppDir", <String>[]);
+  static set listAppDir(List<String> value) => _.put("listAppDir", value);
 
   static String get testAppResVar => _.get("testAppResVar", "");
   static set testAppResVar(String value) => _.put("testAppResVar", value);
