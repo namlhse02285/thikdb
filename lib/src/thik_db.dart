@@ -100,6 +100,8 @@ class ThikDb {
     if(filePath.isEmpty){return "";}
     
     String fileName = path.basenameWithoutExtension(filePath);
+    if(!fileName.startsWith(prefix)){return "";}
+    
     fileName = fileName.substring(prefix.length);
     fileName = utf8.decode(fileName.split(profileNameJoinString).map((e) => int.parse(e)).toList());
     return fileName;
