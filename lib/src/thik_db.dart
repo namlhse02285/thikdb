@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
@@ -86,4 +87,26 @@ class ThikDb {
 
     return <String>[];
   }
+
+  /// profileName encode/decode section
+  static const String profileNameJoinString = "_";
+  static String getProfileNameFromHiveFile(String filePath, String prefix) {
+    if(!filePath.endsWith(".hive")){return "";}
+    
+    return getProfileNameFromPath(filePath, prefix);
+  }
+
+  static String getProfileNameFromPath(String filePath, String prefix) {
+    if(filePath.isEmpty){return "";}
+    
+    String fileName = path.basenameWithoutExtension(filePath);
+    fileName = fileName.substring(prefix.length);
+    fileName = utf8.decode(fileName.split(profileNameJoinString).map((e) => int.parse(e)).toList());
+    return fileName;
+  }
+
+  static String encodeProfileName(String profileName) {
+    return utf8.encode(profileName).join(profileNameJoinString);
+  }
+  /// profileName end section
 }
