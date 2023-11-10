@@ -1,3 +1,7 @@
+## 1.2.1
+
+* Fix bug that getProfileNameFromPath ignore prefix check
+
 ## 1.2.0
 
 * Add getProfileNameFromPath() and getProfileNameFromHiveFile()
