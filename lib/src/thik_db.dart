@@ -49,12 +49,12 @@ class ThikDb {
     return box.get(key, defaultValue: defaultValue) as T;
   }
 
-  void put<T>(String key, T value) {
+  Future<void> put<T>(String key, T value) async {
     if(T == Alignment) {
-      box.put(key, alignToString(value as Alignment));
+      await box.put(key, alignToString(value as Alignment));
       return;
     }
-    box.put(key, value);
+    await box.put(key, value);
   }
 
   Future<void> close() async {

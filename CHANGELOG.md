@@ -1,3 +1,7 @@
+## 1.2.2
+
+* Change return of put to Future
+
 ## 1.2.1
 
 * Fix bug that getProfileNameFromPath ignore prefix check
