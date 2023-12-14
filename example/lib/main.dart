@@ -125,7 +125,7 @@ class AppConfig extends ThikDb {
 
   static Future<void> init() async {
     _ = AppConfig();
-    String dbFullPath = (await _.open(dbDirName: dbDir))!;
+    String dbFullPath = (await _.open(initDirName: dbDir))!;
     dbPath = dbFullPath;
     listAppDir = await _.listAppDirectory();
   }

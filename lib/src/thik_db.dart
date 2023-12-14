@@ -10,31 +10,36 @@ class ThikDb {
   final String tableName;
   late final Box box;
   static const String valuesSeparator = "‡";
+  static String _initDirPath = "";
 
   ThikDb(this.tableName);
 
-  /// Set [dbDirName] if you want this package handle Hive init
+  /// Set [initDirName] if you want this package handle Hive init
   /// Set [aesKey] if you want to encrypt your table by [HiveAesCipher]
   /// Return full path of database directory
   /// if this package handle [Hive.init()], or else return null
-  Future<String?> open({String dbDirName = "", List<int>? aesKey}) async {
+  Future<String?> open({String initDirName = "", List<int>? aesKey, String boxSubDir = ""}) async {
     String? dbDirPath;
 
     /// Save database into app's storage directory
-    if(dbDirName.isNotEmpty) {
+    if(initDirName.isNotEmpty && _initDirPath.isEmpty) {
       List<String> appPathList = await listAppDirectory();
 
       if(appPathList.isEmpty) {
         throw FileSystemException("OS ${Platform.operatingSystem} not handled.");
       }
-      dbDirPath = path.join(appPathList[0], dbDirName);
+      dbDirPath = path.join(appPathList[0], initDirName);
       Hive.init(dbDirPath);
+      _initDirPath = dbDirPath;
     }
     HiveCipher? cipher;
     if(aesKey != null) {
       cipher = HiveAesCipher(aesKey);
     }
-    box = await Hive.openBox(tableName, encryptionCipher: cipher);
+    box = await Hive.openBox(
+        tableName,
+        encryptionCipher: cipher,
+        path: _initDirPath.isEmpty ? null : path.join(_initDirPath, boxSubDir));
     return dbDirPath;
   }
 

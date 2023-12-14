@@ -5,20 +5,25 @@ import 'package:thikdb/thikdb.dart';
 
 void main() {
   test('adds one to input values', () async {
-    AppConfig.init().whenComplete(() {
-      assert(AppConfig.dbPath.isNotEmpty);
-    });
+    await AppConfig.init();
+    assert(AppConfig.dbPath.isNotEmpty);
+
+    TestDb testDb = TestDb("test_box");
+    await testDb.open();
+    await testDb.put("key-1", "val-1");
+    assert(testDb.box.isNotEmpty);
+    await testDb.close();
   });
 }
 
 class AppConfig extends ThikDb {
-  static const String dbDir = "db";
+  static const String dbDir = "db_test_dir";
   static late final AppConfig _;
   AppConfig() :super("app_config");
 
   static Future<void> init() async {
     _ = AppConfig();
-    String dbFullPath = (await _.open(dbDirName: dbDir))!;
+    String dbFullPath = (await _.open(initDirName: dbDir))!;
     dbPath = dbFullPath;
   }
 
@@ -43,4 +48,14 @@ class AppConfig extends ThikDb {
   static String? get testNullableVar => _.box.get("testNullableVar");
   static set testNullableVar(String? value) => null == value
       ? _.box.delete("testNullableVar") : _.box.put("testNullableVar", value);
+}
+
+class TestDb extends ThikDb {
+  TestDb(super.tableName);
+
+  @override
+  Future<String?> open(
+      {String initDirName = "", List<int>? aesKey, String boxSubDir = ""}) {
+    return super.open(boxSubDir: "dir_for_test_box");
+  }
 }

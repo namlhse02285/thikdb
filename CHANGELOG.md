@@ -1,3 +1,7 @@
+## 1.2.3
+
+* Add subdir for open Hive
+
 ## 1.2.2
 
 * Change return of put to Future
